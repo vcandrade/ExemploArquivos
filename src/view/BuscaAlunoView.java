@@ -5,11 +5,12 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import controller.AlunoControl;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import vo.AlunoVO;
 
 /**
- * @author Vinicius 
- * vcandrade@utfpr.edu.br
+ * @author Vinicius vcandrade@utfpr.edu.br
  */
 public class BuscaAlunoView extends javax.swing.JFrame {
 
@@ -40,7 +41,7 @@ public class BuscaAlunoView extends javax.swing.JFrame {
         } catch (SQLException ex) {
 
             JOptionPane.showMessageDialog(rootPane, "Erro de comunicação com o Banco de Dados.", "Bucsar Alunos", JOptionPane.ERROR_MESSAGE);
-        
+
         } catch (Exception ex) {
 
             JOptionPane.showMessageDialog(rootPane, "Erro ao preencher a tabela.", "Bucsar Alunos", JOptionPane.ERROR_MESSAGE);
@@ -63,6 +64,12 @@ public class BuscaAlunoView extends javax.swing.JFrame {
         bFechar = new javax.swing.JButton();
         bExcluir = new javax.swing.JButton();
         bEditar = new javax.swing.JButton();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        menuGerarRelatorio = new javax.swing.JMenuItem();
+        menuSair = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        menuSobre = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Alunos");
@@ -139,6 +146,40 @@ public class BuscaAlunoView extends javax.swing.JFrame {
             }
         });
 
+        jMenu1.setText("Arquivo");
+
+        menuGerarRelatorio.setText("Gerar Relatório");
+        menuGerarRelatorio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuGerarRelatorioActionPerformed(evt);
+            }
+        });
+        jMenu1.add(menuGerarRelatorio);
+
+        menuSair.setText("Sair");
+        menuSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuSairActionPerformed(evt);
+            }
+        });
+        jMenu1.add(menuSair);
+
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Ajuda");
+
+        menuSobre.setText("Sobre");
+        menuSobre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuSobreActionPerformed(evt);
+            }
+        });
+        jMenu2.add(menuSobre);
+
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -165,7 +206,7 @@ public class BuscaAlunoView extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(bNovo, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(bEditar, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
                     .addComponent(bExcluir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(bFechar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -239,6 +280,76 @@ public class BuscaAlunoView extends javax.swing.JFrame {
 
     }//GEN-LAST:event_bFecharActionPerformed
 
+    private void menuSobreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSobreActionPerformed
+
+        Sobre sobre = new Sobre();
+        sobre.setVisible(true);
+
+    }//GEN-LAST:event_menuSobreActionPerformed
+
+    private void menuGerarRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuGerarRelatorioActionPerformed
+
+        try {
+
+            int confirmacao = 0;
+            String extensao = "";
+            JFileChooser jFileChooser = new JFileChooser();
+
+            FileNameExtensionFilter filtroTxt = new FileNameExtensionFilter("Documento de texto (*.txt)", "txt");
+            FileNameExtensionFilter filtroDoc = new FileNameExtensionFilter("Documento do word (*.doc)", "txt");
+            FileNameExtensionFilter filtroXls = new FileNameExtensionFilter("Pasta de Trabalho do Excel (*.xls)", "txt");
+
+            jFileChooser.setFileFilter(filtroDoc);
+            jFileChooser.setFileFilter(filtroXls);
+            jFileChooser.setFileFilter(filtroTxt);
+
+            int valorRetorno = jFileChooser.showSaveDialog(null);
+
+            if (valorRetorno == JFileChooser.APPROVE_OPTION) {
+
+                if (jFileChooser.getFileFilter().getDescription().equals("Documento de texto (*.txt)")) {
+
+                    extensao = ".txt";
+
+                } else if (jFileChooser.getFileFilter().getDescription().equals("Documento do word (*.doc)")) {
+
+                    extensao = ".doc";
+
+                } else if (jFileChooser.getFileFilter().getDescription().equals("Pasta de Trabalho do Excel (*.xls)")) {
+
+                    extensao = ".xls";
+
+                }
+
+                String nomeArquivo = jFileChooser.getSelectedFile().getAbsolutePath() + extensao;
+
+                AlunoControl alunoControl = new AlunoControl();
+                boolean arquivoExiste = alunoControl.verificarExistencia(nomeArquivo);
+
+                if (arquivoExiste) {
+
+                    confirmacao = JOptionPane.showConfirmDialog(null, jFileChooser.getSelectedFile().getName() + " já existe.\nDeseja substituí-lo?", "Confirmar Salvar Arquivo", JOptionPane.YES_NO_OPTION);
+                }
+
+                if (confirmacao == 0) {
+
+                    alunoControl.gerarRelatorio(nomeArquivo);                   
+                }
+            }
+
+        } catch (Exception ex) {
+
+            JOptionPane.showMessageDialog(null, "Erro.\nO arquivo não pode ser criado.", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }//GEN-LAST:event_menuGerarRelatorioActionPerformed
+
+    private void menuSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSairActionPerformed
+
+        this.dispose();
+
+    }//GEN-LAST:event_menuSairActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -280,8 +391,14 @@ public class BuscaAlunoView extends javax.swing.JFrame {
     private javax.swing.JButton bExcluir;
     private javax.swing.JButton bFechar;
     private javax.swing.JButton bNovo;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JMenuItem menuGerarRelatorio;
+    private javax.swing.JMenuItem menuSair;
+    private javax.swing.JMenuItem menuSobre;
     private javax.swing.JTable tAlunos;
     // End of variables declaration//GEN-END:variables
 }

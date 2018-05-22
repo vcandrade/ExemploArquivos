@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
@@ -38,7 +39,7 @@ public class AlunoDAO implements CrudDAO {
     }
 
     @Override
-    public void cadastrar() throws SQLException, Exception {
+    public void cadastrar() throws IOException, SQLException, Exception {
 
         String linha;
 
@@ -59,7 +60,7 @@ public class AlunoDAO implements CrudDAO {
     }
 
     @Override
-    public ArrayList<AlunoVO> buscar() throws SQLException, Exception {
+    public ArrayList<AlunoVO> buscar() throws IOException, SQLException, Exception {
 
         ArrayList<AlunoVO> alunos = new ArrayList<>();
 
@@ -91,7 +92,7 @@ public class AlunoDAO implements CrudDAO {
     }
 
     @Override
-    public void editar() throws SQLException, Exception {
+    public void editar() throws IOException, SQLException, Exception {
 
         String linha;
         String texto;
@@ -118,12 +119,45 @@ public class AlunoDAO implements CrudDAO {
     }
 
     @Override
-    public void excluir() throws SQLException, Exception {
+    public void excluir() throws IOException, SQLException, Exception {
 
         String linha;
         String texto;
 
         BufferedWriter documento = new BufferedWriter(new FileWriter(arquivo.getAbsolutePath() + "\\data\\Alunos.xls"));
+
+        for (int i = 0; i < this.alunos.size(); i++) {
+
+            AlunoVO aluno = alunos.get(i);
+
+            texto = aluno.getRa() + "\t" + aluno.getNome() + "\t" + aluno.getCurso() + "\t" + aluno.getPeriodo() + "\t" + aluno.getCoeficiente() + "\t" + aluno.getSituacao();
+            StringTokenizer st = new StringTokenizer(texto, "\n");
+
+            while (st.hasMoreTokens()) {
+
+                linha = st.nextToken();
+
+                documento.write(linha);
+                documento.newLine();
+            }
+        }
+
+        documento.close();
+    }
+
+    public boolean verificarExistencia(String nomeArquivo) throws IOException, SQLException, Exception {
+        
+        File arquivo = new File(nomeArquivo);
+
+        return arquivo.exists();        
+    }
+    
+    public void gerarRelatorio(String nomeArquivo) throws IOException, SQLException, Exception {
+        
+        String linha;
+        String texto;
+
+        BufferedWriter documento = new BufferedWriter(new FileWriter(nomeArquivo));
 
         for (int i = 0; i < this.alunos.size(); i++) {
 

@@ -3,11 +3,11 @@ package controller;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import dao.AlunoDAO;
+import java.io.IOException;
 import vo.AlunoVO;
 
 /**
- * @author Vinicius 
- * vcandrade@utfpr.edu.br
+ * @author Vinicius vcandrade@utfpr.edu.br
  */
 public class AlunoControl implements CrudControl {
 
@@ -15,7 +15,7 @@ public class AlunoControl implements CrudControl {
 
     }
 
-    public void cadastrar(String ra, String nome, String curso, String periodo, String coeficiente, String situacao) throws ValidacaoException, SQLException, Exception {
+    public void cadastrar(String ra, String nome, String curso, String periodo, String coeficiente, String situacao) throws ValidacaoException, IOException, SQLException, Exception {
 
         this.validarCamposObrigatorios(ra, nome, curso, periodo, coeficiente, situacao);
 
@@ -33,13 +33,13 @@ public class AlunoControl implements CrudControl {
     }
 
     @Override
-    public ArrayList<AlunoVO> buscar() throws SQLException, Exception {
+    public ArrayList<AlunoVO> buscar() throws IOException, SQLException, Exception {
 
         AlunoDAO alunoDao = new AlunoDAO();
         return alunoDao.buscar();
     }
 
-    public void editar(String ra, String nome, String curso, String periodo, String coeficiente, String situacao) throws ValidacaoException, SQLException, Exception {
+    public void editar(String ra, String nome, String curso, String periodo, String coeficiente, String situacao) throws ValidacaoException, IOException, SQLException, Exception {
 
         this.validarCamposObrigatorios(ra, nome, curso, periodo, coeficiente, situacao);
 
@@ -51,40 +51,54 @@ public class AlunoControl implements CrudControl {
         alunoVO.setPeriodo(Integer.parseInt(periodo));
         alunoVO.setCoeficiente(Double.parseDouble(coeficiente));
         alunoVO.setSituacao(situacao);
-        
+
         ArrayList<AlunoVO> alunos = this.buscar();
-        
-        for(int i = 0; i < alunos.size(); i++) {
-            
+
+        for (int i = 0; i < alunos.size(); i++) {
+
             AlunoVO aluno = alunos.get(i);
-            
-            if(aluno.getRa() == alunoVO.getRa()) {
-                
+
+            if (aluno.getRa() == alunoVO.getRa()) {
+
                 alunos.remove(i);
                 alunos.add(alunoVO);
             }
         }
-        
+
         AlunoDAO alunoPers = new AlunoDAO(alunos);
         alunoPers.editar();
     }
 
-    public void excluir(String ra) throws SQLException, Exception {
+    public void excluir(String ra) throws IOException, SQLException, Exception {
 
         ArrayList<AlunoVO> alunos = this.buscar();
-        
-        for(int i = 0; i < alunos.size(); i++) {
-            
+
+        for (int i = 0; i < alunos.size(); i++) {
+
             AlunoVO alunoVO = alunos.get(i);
-            
-            if(Integer.parseInt(ra) == alunoVO.getRa()) {
-                
+
+            if (Integer.parseInt(ra) == alunoVO.getRa()) {
+
                 alunos.remove(i);
             }
         }
-        
+
         AlunoDAO alunoPers = new AlunoDAO(alunos);
         alunoPers.excluir();
+    }
+
+    public boolean verificarExistencia(String nomeArquivo) throws IOException, SQLException, Exception {
+
+        AlunoDAO alunoDAO = new AlunoDAO();
+        return alunoDAO.verificarExistencia(nomeArquivo);
+    }
+
+    public void gerarRelatorio(String nomeArquivo) throws IOException, SQLException, Exception {
+
+        ArrayList <AlunoVO> alunos = this.buscar();
+        
+        AlunoDAO alunoDAO = new AlunoDAO(alunos);
+        alunoDAO.gerarRelatorio(nomeArquivo);
     }
 
     private void validarCamposObrigatorios(String ra, String nome, String curso, String periodo, String coeficiente, String situacao) throws ValidacaoException {
