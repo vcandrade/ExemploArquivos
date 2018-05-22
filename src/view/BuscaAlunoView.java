@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import controller.AlunoControl;
+import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import vo.AlunoVO;
 
 /**
- * @author Vinicius vcandrade@utfpr.edu.br
+ * @author Vinicius 
+ * vcandrade@utfpr.edu.br
  */
 public class BuscaAlunoView extends javax.swing.JFrame {
 
@@ -333,13 +335,22 @@ public class BuscaAlunoView extends javax.swing.JFrame {
 
                 if (confirmacao == 0) {
 
-                    alunoControl.gerarRelatorio(nomeArquivo);                   
+                    alunoControl.gerarRelatorio(nomeArquivo);
+                    JOptionPane.showMessageDialog(null, "Relatório gerado com sucesso!", "Gerar Relatório", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
 
+        } catch (IOException ioe) {
+
+            JOptionPane.showMessageDialog(null, "Erro: " + ioe.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        
+        } catch (SQLException sqle) {
+
+            JOptionPane.showMessageDialog(null, "Erro: " + sqle.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        
         } catch (Exception ex) {
 
-            JOptionPane.showMessageDialog(null, "Erro.\nO arquivo não pode ser criado.", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
 
     }//GEN-LAST:event_menuGerarRelatorioActionPerformed
