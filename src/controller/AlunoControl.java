@@ -1,15 +1,13 @@
 package controller;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import dao.AlunoDAO;
-import java.io.File;
-import java.util.Iterator;
 import vo.AlunoVO;
 
 /**
- * @author Vinicius vcandrade@utfpr.edu.br
+ * @author Vinicius 
+ * vcandrade@utfpr.edu.br
  */
 public class AlunoControl implements CrudControl {
 

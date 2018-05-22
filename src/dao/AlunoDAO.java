@@ -5,17 +5,14 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
-import javax.swing.JOptionPane;
 import vo.AlunoVO;
 
 /**
- * @author Vinicius vcandrade@utfpr.edu.br
+ * @author Vinicius 
+ * vcandrade@utfpr.edu.br
  */
 public class AlunoDAO implements CrudDAO {
 

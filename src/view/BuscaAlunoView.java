@@ -8,7 +8,8 @@ import controller.AlunoControl;
 import vo.AlunoVO;
 
 /**
- * @author Vinicius vcandrade@utfpr.edu.br
+ * @author Vinicius 
+ * vcandrade@utfpr.edu.br
  */
 public class BuscaAlunoView extends javax.swing.JFrame {
 
