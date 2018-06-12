@@ -6,6 +6,8 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import controller.AlunoControl;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import vo.AlunoVO;
@@ -21,10 +23,23 @@ public class BuscaAlunoView extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
 
-        this.popularTabelaAlunos();
+        this.buscarAlunos();
+    }
+    
+    public void buscarAlunos() {
+        try {
+
+            AlunoControl alunoControl = new AlunoControl();
+            ArrayList<AlunoVO> alunos = alunoControl.buscar();
+            this.popularTabelaAlunos(alunos);
+
+        } catch (Exception ex) {
+
+            Logger.getLogger(BuscaAlunoView.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
-    public void popularTabelaAlunos() {
+    public void popularTabelaAlunos(ArrayList<AlunoVO> alunos) {
 
         try {
 
@@ -32,17 +47,10 @@ public class BuscaAlunoView extends javax.swing.JFrame {
             dtmAluno.fireTableDataChanged();
             dtmAluno.setRowCount(0);
 
-            AlunoControl alunoControl = new AlunoControl();
-            ArrayList<AlunoVO> alunos = alunoControl.buscar();
-
             for (AlunoVO alunoVO : alunos) {
 
                 dtmAluno.addRow(new Object[]{alunoVO.getRa(), alunoVO.getNome(), alunoVO.getCurso(), alunoVO.getPeriodo(), alunoVO.getCoeficiente(), alunoVO.getSituacao()});// adiciona na jtbale
             }
-
-        } catch (SQLException ex) {
-
-            JOptionPane.showMessageDialog(rootPane, "Erro de comunicação com o Banco de Dados.", "Bucsar Alunos", JOptionPane.ERROR_MESSAGE);
 
         } catch (Exception ex) {
 
@@ -62,6 +70,8 @@ public class BuscaAlunoView extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tAlunos = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        txtFiltro = new javax.swing.JTextField();
         bNovo = new javax.swing.JButton();
         bFechar = new javax.swing.JButton();
         bExcluir = new javax.swing.JButton();
@@ -103,20 +113,38 @@ public class BuscaAlunoView extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tAlunos);
 
+        jLabel1.setText("Filtro:");
+
+        txtFiltro.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtFiltroKeyReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 820, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 347, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txtFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -208,7 +236,7 @@ public class BuscaAlunoView extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(bNovo, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bEditar, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
+                    .addComponent(bEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(bExcluir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(bFechar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -271,7 +299,7 @@ public class BuscaAlunoView extends javax.swing.JFrame {
 
         } finally {
 
-            this.popularTabelaAlunos();
+            this.buscarAlunos();
         }
 
     }//GEN-LAST:event_bExcluirActionPerformed
@@ -361,6 +389,28 @@ public class BuscaAlunoView extends javax.swing.JFrame {
 
     }//GEN-LAST:event_menuSairActionPerformed
 
+    private void txtFiltroKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFiltroKeyReleased
+
+        try {
+        
+            String nome = this.txtFiltro.getText();
+            
+            AlunoControl alunoControl = new AlunoControl();
+            ArrayList<AlunoVO> alunos = alunoControl.buscarAluno(nome);
+            
+            this.popularTabelaAlunos(alunos);
+       
+        } catch (SQLException ex) {
+        
+            Logger.getLogger(BuscaAlunoView.class.getName()).log(Level.SEVERE, null, ex);
+       
+        } catch (Exception ex) {
+            
+            Logger.getLogger(BuscaAlunoView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_txtFiltroKeyReleased
+
     /**
      * @param args the command line arguments
      */
@@ -402,6 +452,7 @@ public class BuscaAlunoView extends javax.swing.JFrame {
     private javax.swing.JButton bExcluir;
     private javax.swing.JButton bFechar;
     private javax.swing.JButton bNovo;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
@@ -411,5 +462,6 @@ public class BuscaAlunoView extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuSair;
     private javax.swing.JMenuItem menuSobre;
     private javax.swing.JTable tAlunos;
+    private javax.swing.JTextField txtFiltro;
     // End of variables declaration//GEN-END:variables
 }

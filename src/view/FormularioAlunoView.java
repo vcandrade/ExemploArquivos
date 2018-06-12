@@ -205,7 +205,7 @@ public class FormularioAlunoView extends javax.swing.JFrame {
                     this.tCoeficiente.getText(), 
                     this.cbSituacao.getSelectedItem().toString());
             
-            this.buscaAlunoView.popularTabelaAlunos();
+            this.buscaAlunoView.buscarAlunos();
             
             JOptionPane.showMessageDialog(rootPane, "Cadastro realizado com sucesso!", "Cadastro Cliente", JOptionPane.INFORMATION_MESSAGE);
             
@@ -246,7 +246,7 @@ public class FormularioAlunoView extends javax.swing.JFrame {
                     this.tCoeficiente.getText(), 
                     this.cbSituacao.getSelectedItem().toString());
             
-            this.buscaAlunoView.popularTabelaAlunos();
+            this.buscaAlunoView.buscarAlunos();
             
             JOptionPane.showMessageDialog(rootPane, "Edição realizada com sucesso!", "Editar Cliente", JOptionPane.INFORMATION_MESSAGE);
             

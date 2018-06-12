@@ -39,6 +39,23 @@ public class AlunoControl implements CrudControl {
         return alunoDao.buscar();
     }
 
+    public ArrayList<AlunoVO> buscarAluno(String nome) throws IOException, SQLException, Exception {
+
+        AlunoDAO alunoDao = new AlunoDAO();
+        ArrayList<AlunoVO> alunos = alunoDao.buscar();
+        
+        ArrayList<AlunoVO> alunosFiltrados = new ArrayList<>();
+        
+        for (AlunoVO alunoVO : alunos) {
+            
+            if(alunoVO.getNome().contains(nome)){
+                
+                alunosFiltrados.add(alunoVO);
+            }
+        }
+        return alunosFiltrados;
+    }
+
     public void editar(String ra, String nome, String curso, String periodo, String coeficiente, String situacao) throws ValidacaoException, IOException, SQLException, Exception {
 
         this.validarCamposObrigatorios(ra, nome, curso, periodo, coeficiente, situacao);
@@ -95,8 +112,8 @@ public class AlunoControl implements CrudControl {
 
     public void gerarRelatorio(String nomeArquivo) throws IOException, SQLException, Exception {
 
-        ArrayList <AlunoVO> alunos = this.buscar();
-        
+        ArrayList<AlunoVO> alunos = this.buscar();
+
         AlunoDAO alunoDAO = new AlunoDAO(alunos);
         alunoDAO.gerarRelatorio(nomeArquivo);
     }
