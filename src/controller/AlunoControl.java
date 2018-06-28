@@ -82,8 +82,8 @@ public class AlunoControl implements CrudControl {
             }
         }
 
-        AlunoDAO alunoPers = new AlunoDAO(alunos);
-        alunoPers.editar();
+        AlunoDAO alunoDAO = new AlunoDAO(alunos);
+        alunoDAO.editar();
     }
 
     public void excluir(String ra) throws IOException, SQLException, Exception {
@@ -100,8 +100,8 @@ public class AlunoControl implements CrudControl {
             }
         }
 
-        AlunoDAO alunoPers = new AlunoDAO(alunos);
-        alunoPers.excluir();
+        AlunoDAO alunoDAO = new AlunoDAO(alunos);
+        alunoDAO.excluir();
     }
 
     public boolean verificarExistencia(String nomeArquivo) throws IOException, SQLException, Exception {
@@ -120,11 +120,11 @@ public class AlunoControl implements CrudControl {
 
     private void validarCamposObrigatorios(String ra, String nome, String curso, String periodo, String coeficiente, String situacao) throws ValidacaoException {
 
-        if (ra.equals("")) {
+        if (ra.isEmpty()) {
 
             throw new ValidacaoException("Campo RA é obrigatório.");
 
-        } else if (nome.equals("")) {
+        } else if (nome.isEmpty()) {
 
             throw new ValidacaoException(("Campo Nome é obrigatório."));
 
@@ -132,7 +132,7 @@ public class AlunoControl implements CrudControl {
 
             throw new ValidacaoException("O Período deve ser um número maior ou igual a 1.");
 
-        } else if (coeficiente.equals("")) {
+        } else if (coeficiente.isEmpty()) {
 
             throw new ValidacaoException("Campo Coeficiente é obrigatório.");
 
