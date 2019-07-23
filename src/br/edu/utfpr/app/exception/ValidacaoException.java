@@ -1,4 +1,4 @@
-package controller;
+package br.edu.utfpr.app.exception;
 
 /**
  * @author Vinicius 

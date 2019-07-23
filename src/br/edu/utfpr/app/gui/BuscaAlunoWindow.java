@@ -1,24 +1,24 @@
-package view;
+package br.edu.utfpr.app.gui;
 
+import br.edu.utfpr.app.entity.Aluno;
+import br.edu.utfpr.app.service.AlunoService;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import controller.AlunoControl;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import vo.AlunoVO;
 
 /**
  * @author Vinicius 
  * vcandrade@utfpr.edu.br
  */
-public class BuscaAlunoView extends javax.swing.JFrame {
+public class BuscaAlunoWindow extends javax.swing.JFrame {
 
-    public BuscaAlunoView() {
+    public BuscaAlunoWindow() {
 
         initComponents();
         this.setLocationRelativeTo(null);
@@ -29,17 +29,17 @@ public class BuscaAlunoView extends javax.swing.JFrame {
     public void buscarAlunos() {
         try {
 
-            AlunoControl alunoControl = new AlunoControl();
-            ArrayList<AlunoVO> alunos = alunoControl.buscar();
+            AlunoService alunoService = new AlunoService();
+            ArrayList<Aluno> alunos = alunoService.buscar();
             this.popularTabelaAlunos(alunos);
 
         } catch (Exception ex) {
 
-            Logger.getLogger(BuscaAlunoView.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(BuscaAlunoWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public void popularTabelaAlunos(ArrayList<AlunoVO> alunos) {
+    public void popularTabelaAlunos(ArrayList<Aluno> alunos) {
 
         try {
 
@@ -47,9 +47,9 @@ public class BuscaAlunoView extends javax.swing.JFrame {
             dtmAluno.fireTableDataChanged();
             dtmAluno.setRowCount(0);
 
-            for (AlunoVO alunoVO : alunos) {
+            for (Aluno aluno : alunos) {
 
-                dtmAluno.addRow(new Object[]{alunoVO.getRa(), alunoVO.getNome(), alunoVO.getCurso(), alunoVO.getPeriodo(), alunoVO.getCoeficiente(), alunoVO.getSituacao()});// adiciona na jtbale
+                dtmAluno.addRow(new Object[]{aluno.getRa(), aluno.getNome(), aluno.getCurso(), aluno.getPeriodo(), aluno.getCoeficiente(), aluno.getSituacao()});// adiciona na jtbale
             }
 
         } catch (Exception ex) {
@@ -247,8 +247,8 @@ public class BuscaAlunoView extends javax.swing.JFrame {
 
     private void bNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bNovoActionPerformed
 
-        FormularioAlunoView formularioAlunoVisao = new FormularioAlunoView(this);
-        formularioAlunoVisao.setVisible(true);
+        FormularioAlunoWindow formularioAlunoWindow = new FormularioAlunoWindow(this);
+        formularioAlunoWindow.setVisible(true);
 
     }//GEN-LAST:event_bNovoActionPerformed
 
@@ -256,17 +256,17 @@ public class BuscaAlunoView extends javax.swing.JFrame {
 
         try {
 
-            AlunoVO alunoVO = new AlunoVO();
+            Aluno aluno = new Aluno();
 
-            alunoVO.setRa(Integer.parseInt(this.tAlunos.getValueAt(this.tAlunos.getSelectedRow(), 0).toString()));
-            alunoVO.setNome((String) this.tAlunos.getValueAt(this.tAlunos.getSelectedRow(), 1));
-            alunoVO.setCurso((String) this.tAlunos.getValueAt(this.tAlunos.getSelectedRow(), 2));
-            alunoVO.setPeriodo(Integer.parseInt(this.tAlunos.getValueAt(this.tAlunos.getSelectedRow(), 3).toString()));
-            alunoVO.setCoeficiente(Double.parseDouble(this.tAlunos.getValueAt(this.tAlunos.getSelectedRow(), 4).toString()));
-            alunoVO.setSituacao((String) this.tAlunos.getValueAt(this.tAlunos.getSelectedRow(), 5));
+            aluno.setRa(Integer.parseInt(this.tAlunos.getValueAt(this.tAlunos.getSelectedRow(), 0).toString()));
+            aluno.setNome((String) this.tAlunos.getValueAt(this.tAlunos.getSelectedRow(), 1));
+            aluno.setCurso((String) this.tAlunos.getValueAt(this.tAlunos.getSelectedRow(), 2));
+            aluno.setPeriodo(Integer.parseInt(this.tAlunos.getValueAt(this.tAlunos.getSelectedRow(), 3).toString()));
+            aluno.setCoeficiente(Double.parseDouble(this.tAlunos.getValueAt(this.tAlunos.getSelectedRow(), 4).toString()));
+            aluno.setSituacao((String) this.tAlunos.getValueAt(this.tAlunos.getSelectedRow(), 5));
 
-            FormularioAlunoView formularioAlunoVisao = new FormularioAlunoView(this, alunoVO);
-            formularioAlunoVisao.setVisible(true);
+            FormularioAlunoWindow formularioAlunoWindow = new FormularioAlunoWindow(this, aluno);
+            formularioAlunoWindow.setVisible(true);
 
         } catch (ArrayIndexOutOfBoundsException ex) {
 
@@ -283,8 +283,8 @@ public class BuscaAlunoView extends javax.swing.JFrame {
 
             if (confirmacao == 0) {
 
-                AlunoControl alunoControl = new AlunoControl();
-                alunoControl.excluir(this.tAlunos.getValueAt(this.tAlunos.getSelectedRow(), 0).toString());
+                AlunoService alunoService = new AlunoService();
+                alunoService.excluir(this.tAlunos.getValueAt(this.tAlunos.getSelectedRow(), 0).toString());
 
                 JOptionPane.showMessageDialog(rootPane, "Registro excluído com sucesso!", "Exclusão de Registro", JOptionPane.INFORMATION_MESSAGE);
             }
@@ -312,8 +312,8 @@ public class BuscaAlunoView extends javax.swing.JFrame {
 
     private void menuSobreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSobreActionPerformed
 
-        Sobre sobre = new Sobre();
-        sobre.setVisible(true);
+        SobreWindow sobreWindow = new SobreWindow();
+        sobreWindow.setVisible(true);
 
     }//GEN-LAST:event_menuSobreActionPerformed
 
@@ -353,8 +353,8 @@ public class BuscaAlunoView extends javax.swing.JFrame {
 
                 String nomeArquivo = jFileChooser.getSelectedFile().getAbsolutePath() + extensao;
 
-                AlunoControl alunoControl = new AlunoControl();
-                boolean arquivoExiste = alunoControl.verificarExistencia(nomeArquivo);
+                AlunoService alunoService = new AlunoService();
+                boolean arquivoExiste = alunoService.verificarExistencia(nomeArquivo);
 
                 if (arquivoExiste) {
 
@@ -363,7 +363,7 @@ public class BuscaAlunoView extends javax.swing.JFrame {
 
                 if (confirmacao == 0) {
 
-                    alunoControl.gerarRelatorio(nomeArquivo);
+                    alunoService.gerarRelatorio(nomeArquivo);
                     JOptionPane.showMessageDialog(null, "Relatório gerado com sucesso!", "Gerar Relatório", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
@@ -395,18 +395,18 @@ public class BuscaAlunoView extends javax.swing.JFrame {
         
             String nome = this.txtFiltro.getText();
             
-            AlunoControl alunoControl = new AlunoControl();
-            ArrayList<AlunoVO> alunos = alunoControl.buscarAluno(nome);
+            AlunoService alunoService = new AlunoService();
+            ArrayList<Aluno> alunos = alunoService.buscarAluno(nome);
             
             this.popularTabelaAlunos(alunos);
        
         } catch (SQLException ex) {
         
-            Logger.getLogger(BuscaAlunoView.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(BuscaAlunoWindow.class.getName()).log(Level.SEVERE, null, ex);
        
         } catch (Exception ex) {
             
-            Logger.getLogger(BuscaAlunoView.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(BuscaAlunoWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }//GEN-LAST:event_txtFiltroKeyReleased
@@ -428,21 +428,23 @@ public class BuscaAlunoView extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(BuscaAlunoView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BuscaAlunoWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(BuscaAlunoView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BuscaAlunoWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(BuscaAlunoView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BuscaAlunoWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(BuscaAlunoView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BuscaAlunoWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new BuscaAlunoView().setVisible(true);
+                new BuscaAlunoWindow().setVisible(true);
             }
         });
     }

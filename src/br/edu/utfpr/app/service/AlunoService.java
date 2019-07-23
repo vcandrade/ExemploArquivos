@@ -1,17 +1,19 @@
-package controller;
+package br.edu.utfpr.app.service;
 
+import br.edu.utfpr.app.dao.AlunoDAO;
+import br.edu.utfpr.app.entity.Aluno;
+import br.edu.utfpr.app.exception.ValidacaoException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import dao.AlunoDAO;
 import java.io.IOException;
-import vo.AlunoVO;
 
 /**
- * @author Vinicius vcandrade@utfpr.edu.br
+ * @author Vinicius 
+ * vcandrade@utfpr.edu.br
  */
-public class AlunoControl implements CrudControl {
+public class AlunoService implements CrudService {
 
-    public AlunoControl() {
+    public AlunoService() {
 
     }
 
@@ -19,38 +21,38 @@ public class AlunoControl implements CrudControl {
 
         this.validarCamposObrigatorios(ra, nome, curso, periodo, coeficiente, situacao);
 
-        AlunoVO alunoVO = new AlunoVO();
+        Aluno aluno = new Aluno();
 
-        alunoVO.setRa(Integer.parseInt(ra));
-        alunoVO.setNome(nome);
-        alunoVO.setCurso(curso);
-        alunoVO.setPeriodo(Integer.parseInt(periodo));
-        alunoVO.setCoeficiente(Double.parseDouble(coeficiente));
-        alunoVO.setSituacao(situacao);
+        aluno.setRa(Integer.parseInt(ra));
+        aluno.setNome(nome);
+        aluno.setCurso(curso);
+        aluno.setPeriodo(Integer.parseInt(periodo));
+        aluno.setCoeficiente(Double.parseDouble(coeficiente));
+        aluno.setSituacao(situacao);
 
-        AlunoDAO alunoDao = new AlunoDAO(alunoVO);
+        AlunoDAO alunoDao = new AlunoDAO(aluno);
         alunoDao.cadastrar();
     }
 
     @Override
-    public ArrayList<AlunoVO> buscar() throws IOException, SQLException, Exception {
+    public ArrayList<Aluno> buscar() throws IOException, SQLException, Exception {
 
         AlunoDAO alunoDao = new AlunoDAO();
         return alunoDao.buscar();
     }
 
-    public ArrayList<AlunoVO> buscarAluno(String nome) throws IOException, SQLException, Exception {
+    public ArrayList<Aluno> buscarAluno(String nome) throws IOException, SQLException, Exception {
 
         AlunoDAO alunoDao = new AlunoDAO();
-        ArrayList<AlunoVO> alunos = alunoDao.buscar();
+        ArrayList<Aluno> alunos = alunoDao.buscar();
         
-        ArrayList<AlunoVO> alunosFiltrados = new ArrayList<>();
+        ArrayList<Aluno> alunosFiltrados = new ArrayList<>();
         
-        for (AlunoVO alunoVO : alunos) {
+        for (Aluno aluno : alunos) {
             
-            if(alunoVO.getNome().contains(nome)){
+            if(aluno.getNome().contains(nome)){
                 
-                alunosFiltrados.add(alunoVO);
+                alunosFiltrados.add(aluno);
             }
         }
         return alunosFiltrados;
@@ -60,25 +62,25 @@ public class AlunoControl implements CrudControl {
 
         this.validarCamposObrigatorios(ra, nome, curso, periodo, coeficiente, situacao);
 
-        AlunoVO alunoVO = new AlunoVO();
+        Aluno aluno = new Aluno();
 
-        alunoVO.setRa(Integer.parseInt(ra));
-        alunoVO.setNome(nome);
-        alunoVO.setCurso(curso);
-        alunoVO.setPeriodo(Integer.parseInt(periodo));
-        alunoVO.setCoeficiente(Double.parseDouble(coeficiente));
-        alunoVO.setSituacao(situacao);
+        aluno.setRa(Integer.parseInt(ra));
+        aluno.setNome(nome);
+        aluno.setCurso(curso);
+        aluno.setPeriodo(Integer.parseInt(periodo));
+        aluno.setCoeficiente(Double.parseDouble(coeficiente));
+        aluno.setSituacao(situacao);
 
-        ArrayList<AlunoVO> alunos = this.buscar();
+        ArrayList<Aluno> alunos = this.buscar();
 
         for (int i = 0; i < alunos.size(); i++) {
 
-            AlunoVO aluno = alunos.get(i);
+            Aluno novoAluno = alunos.get(i);
 
-            if (aluno.getRa() == alunoVO.getRa()) {
+            if (novoAluno.getRa() == aluno.getRa()) {
 
                 alunos.remove(i);
-                alunos.add(alunoVO);
+                alunos.add(aluno);
             }
         }
 
@@ -88,13 +90,13 @@ public class AlunoControl implements CrudControl {
 
     public void excluir(String ra) throws IOException, SQLException, Exception {
 
-        ArrayList<AlunoVO> alunos = this.buscar();
+        ArrayList<Aluno> alunos = this.buscar();
 
         for (int i = 0; i < alunos.size(); i++) {
 
-            AlunoVO alunoVO = alunos.get(i);
+            Aluno aluno = alunos.get(i);
 
-            if (Integer.parseInt(ra) == alunoVO.getRa()) {
+            if (Integer.parseInt(ra) == aluno.getRa()) {
 
                 alunos.remove(i);
             }
@@ -112,7 +114,7 @@ public class AlunoControl implements CrudControl {
 
     public void gerarRelatorio(String nomeArquivo) throws IOException, SQLException, Exception {
 
-        ArrayList<AlunoVO> alunos = this.buscar();
+        ArrayList<Aluno> alunos = this.buscar();
 
         AlunoDAO alunoDAO = new AlunoDAO(alunos);
         alunoDAO.gerarRelatorio(nomeArquivo);

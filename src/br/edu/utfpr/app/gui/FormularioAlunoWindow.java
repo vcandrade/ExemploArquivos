@@ -1,30 +1,30 @@
-package view;
+package br.edu.utfpr.app.gui;
 
+import br.edu.utfpr.app.entity.Aluno;
+import br.edu.utfpr.app.exception.ValidacaoException;
+import br.edu.utfpr.app.service.AlunoService;
 import javax.swing.JOptionPane;
-import controller.AlunoControl;
-import controller.ValidacaoException;
-import vo.AlunoVO;
 
 /**
  * @author Vinicius 
  * vcandrade@utfpr.edu.br
  */
 
-public class FormularioAlunoView extends javax.swing.JFrame {
+public class FormularioAlunoWindow extends javax.swing.JFrame {
     
-    private BuscaAlunoView buscaAlunoView;
+    private BuscaAlunoWindow buscaAlunoWindow;
 
-    public FormularioAlunoView(BuscaAlunoView buscaAlunoVisao) {
+    public FormularioAlunoWindow(BuscaAlunoWindow buscaAlunoWindow) {
 
         initComponents();
         this.setTitle("Cadastro de Aluno");
         this.bEditar.setEnabled(false);
         this.setLocationRelativeTo(null);
         
-        this.buscaAlunoView = buscaAlunoVisao;      
+        this.buscaAlunoWindow = buscaAlunoWindow;      
     }
     
-    public FormularioAlunoView(BuscaAlunoView buscaAlunoView, AlunoVO alunoVO) {
+    public FormularioAlunoWindow(BuscaAlunoWindow buscaAlunoWindow, Aluno aluno) {
 
         initComponents();
         this.setTitle("Edição de Registro de Aluno");
@@ -32,19 +32,19 @@ public class FormularioAlunoView extends javax.swing.JFrame {
         this.tRA.setEnabled(false);
         this.setLocationRelativeTo(null);
         
-        this.buscaAlunoView = buscaAlunoView;
+        this.buscaAlunoWindow = buscaAlunoWindow;
         
-        popularCampos(alunoVO);
+        popularCampos(aluno);
     }
     
-    public void popularCampos(AlunoVO alunoVO) {
+    public void popularCampos(Aluno aluno) {
         
-        this.gettRA().setText(String.valueOf(alunoVO.getRa()));
-        this.gettNome().setText(alunoVO.getNome());
-        this.getCbCurso().setSelectedItem(alunoVO.getCurso());
-        this.getsPeriodo().setValue(alunoVO.getPeriodo());
-        this.gettCoeficiente().setText(String.valueOf(alunoVO.getCoeficiente()));
-        this.getCbSituacao().setSelectedItem(alunoVO.getSituacao());
+        this.gettRA().setText(String.valueOf(aluno.getRa()));
+        this.gettNome().setText(aluno.getNome());
+        this.getCbCurso().setSelectedItem(aluno.getCurso());
+        this.getsPeriodo().setValue(aluno.getPeriodo());
+        this.gettCoeficiente().setText(String.valueOf(aluno.getCoeficiente()));
+        this.getCbSituacao().setSelectedItem(aluno.getSituacao());
     }
 
     @SuppressWarnings("unchecked")
@@ -197,15 +197,15 @@ public class FormularioAlunoView extends javax.swing.JFrame {
 
         try {
             
-            AlunoControl alunoControl = new AlunoControl();
-            alunoControl.cadastrar(this.tRA.getText(), 
+            AlunoService alunoService = new AlunoService();
+            alunoService.cadastrar(this.tRA.getText(), 
                     this.tNome.getText(), 
                     this.cbCurso.getSelectedItem().toString(), 
                     this.sPeriodo.getValue().toString(), 
                     this.tCoeficiente.getText(), 
                     this.cbSituacao.getSelectedItem().toString());
             
-            this.buscaAlunoView.buscarAlunos();
+            this.buscaAlunoWindow.buscarAlunos();
             
             JOptionPane.showMessageDialog(rootPane, "Cadastro realizado com sucesso!", "Cadastro Cliente", JOptionPane.INFORMATION_MESSAGE);
             
@@ -238,15 +238,15 @@ public class FormularioAlunoView extends javax.swing.JFrame {
 
         try {
             
-            AlunoControl alunoControl = new AlunoControl();
-            alunoControl.editar(this.tRA.getText(), 
+            AlunoService alunoService = new AlunoService();
+            alunoService.editar(this.tRA.getText(), 
                     this.tNome.getText(), 
                     this.cbCurso.getSelectedItem().toString(), 
                     this.sPeriodo.getValue().toString(), 
                     this.tCoeficiente.getText(), 
                     this.cbSituacao.getSelectedItem().toString());
             
-            this.buscaAlunoView.buscarAlunos();
+            this.buscaAlunoWindow.buscarAlunos();
             
             JOptionPane.showMessageDialog(rootPane, "Edição realizada com sucesso!", "Editar Cliente", JOptionPane.INFORMATION_MESSAGE);
             

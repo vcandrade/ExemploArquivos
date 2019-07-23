@@ -4,16 +4,16 @@
  * and open the template in the editor.
  */
 
-package view;
+package br.edu.utfpr.app.gui;
 
 /**
  *
  * @author Vinicius
  */
-public class Sobre extends javax.swing.JDialog {
+public class SobreWindow extends javax.swing.JDialog {
 
     
-    public Sobre() {
+    public SobreWindow() {
         
         initComponents();
         this.setLocationRelativeTo(null);

@@ -1,11 +1,11 @@
-package vo;
+package br.edu.utfpr.app.entity;
 
 /**
  * @author Vinicius 
  * vcandrade@utfpr.edu.br
  */
 
-public class AlunoVO {
+public class Aluno {
 
     private int ra;
     private String nome;
@@ -14,11 +14,11 @@ public class AlunoVO {
     private double coeficiente;
     private String situacao;
 
-    public AlunoVO() {
+    public Aluno() {
     
     }
     
-    public AlunoVO(int ra, String nome, String curso, int periodo, double coeficiente, String situacao) {
+    public Aluno(int ra, String nome, String curso, int periodo, double coeficiente, String situacao) {
      
         this.ra = ra;
         this.nome = nome;
